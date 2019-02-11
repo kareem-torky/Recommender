@@ -28,7 +28,7 @@
 
                     <div class="form-group">
                         {!! Form::label('gender', 'Edit Gender') !!}
-                        {!! Form::select('gender', ['M' => 'Male', 'F' => 'Female'], $student->gender, ['placeholder' => 'Select Gender', 'class'=>'form-control']) !!}
+                        {!! Form::select('gender', ['male' => 'Male', 'female' => 'Female'], $student->gender, ['class'=>'form-control']) !!}
                     </div>
 
                     <div class="form-group">

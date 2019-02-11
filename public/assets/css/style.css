@@ -49,6 +49,7 @@
 #sidebar {
     background-color: rgba(205, 215, 225, 0.8);
     padding: 20px;
+    height: 400px;
 }
 
 .form-box {

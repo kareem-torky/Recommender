@@ -1,10 +1,6 @@
 @extends('layouts.layout')
 
 @section('nav-menu')
-    <form class="form-inline">
-        <button class="btn btn-primary mr-3" type="button">Login</button>
-        <button class="btn btn-primary" type="button">Sign Up</button>
-    </form>
 @endsection
 
 @section('content')
@@ -14,7 +10,15 @@
             <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
             <hr class="my-4">
             <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-            <a class="btn btn-primary btn-lg" href="#" role="button">Sign Up</a>
+            
+            @auth('student')
+                <a class="btn btn-primary btn-lg" href="{{ route('homepage') }}" role="button">Back to Homepage</a>
+            @endauth
+            
+            @guest('student')
+                <a class="btn btn-primary btn-lg" href="{{ route('signup') }}" role="button">Sign Up</a>
+                <a class="btn btn-primary btn-lg" href="{{ route('login') }}" role="button">Log In</a>
+            @endguest
         </div>
     </div>
 @endsection

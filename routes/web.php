@@ -11,6 +11,8 @@
 |
 */
 
+Route::get('/trial', 'TrialController@trial');
+
 Route::get('/', 'IntroController@index')->name('intro');
 
 Route::get('/signup', 'RegisterController@signup')->name('signup');

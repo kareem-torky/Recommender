@@ -19,54 +19,34 @@
         <div class="row">
             <div id="list-section" class="col-lg-8">
                 <h3 class="mb-3">Recommended Colleges:</h3>
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                        <th scope="col"></th>
-                        <th scope="col">College</th>
-                        <th scope="col">University</th>
-                        <th scope="col">GPA</th>
-                        <th scope="col">Pricing</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>College</td>
-                            <td>University</td>
-                            <td>GPA</td>
-                            <td>Pricing</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>College</td>
-                            <td>University</td>
-                            <td>GPA</td>
-                            <td>Pricing</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>College</td>
-                            <td>University</td>
-                            <td>GPA</td>
-                            <td>Pricing</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">4</th>
-                            <td>College</td>
-                            <td>University</td>
-                            <td>GPA</td>
-                            <td>Pricing</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">5</th>
-                            <td>College</td>
-                            <td>University</td>
-                            <td>GPA</td>
-                            <td>Pricing</td>
-                        </tr>
-                    </tbody>
-                </table>
+                @if(count($colleges) > 0)
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                            <th scope="col"></th>
+                            <th scope="col">College</th>
+                            <th scope="col">University</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">GPA</th>
+                            <th scope="col">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($colleges as $key => $college)
+                                <tr>
+                                    <th scope="row">{{ $key+1 }}</th>
+                                    <td>{{ $college->college }}</td>
+                                    <td>{{ $college->university }}</td>
+                                    <td>{{ $college->gender }}</td>
+                                    <td>{{ $college->gpa }}</td>
+                                    <td>{{ $college->price }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @else 
+                    <p>Select speciality and max. price to show list</p>
+                @endif
             </div>
             <div id="sidebar" class="col-lg-4">
                 <form action="{{ route('viewList') }}" method="POST">

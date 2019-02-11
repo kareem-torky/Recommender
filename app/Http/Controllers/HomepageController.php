@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Student;
 use App\Speciality;
+use App\College;
 
 class HomepageController extends Controller
 {
     public function index(){
         $data['specialities'] = Speciality::all();
+        $data['colleges'] = [];
         return view('homepage')->with($data);
     }
 
@@ -29,7 +31,38 @@ class HomepageController extends Controller
             'price'=> $data['price']
         ];
 
-        dd($student_list);
+        $min_max_arr = ['min_gpa' => College::min('gpa'), 'max_gpa' => College::max('gpa'),
+                        'min_price' => College::min('price'), 'max_price' => College::max('price'),
+                        'min_rating' => College::min('rating'), 'max_rating' => College::max('rating')];
+
+        $student_v = ['gpa'=>$student_list['gpa'], 'price'=>$student_list['price'], 'rating'=>$min_max_arr['min_rating']];
+        $student_v_n = normalize_vector($student_v, $min_max_arr);
+
+        $gender = gender_convert($student->gender);
+
+        $data['specialities'] = Speciality::all();
+        $colleges = College::where([
+            ['speciality', '=', $student_list['speciality']],
+            ['gpa', '<=', $student_list['gpa']],
+            ['price', '<=', $student_list['price']]
+            ])->whereIn('gender', $gender)->get();
+        $ids = get_selected_ids($colleges);
+        
+        $colleges_v = college_to_vector($colleges);
+
+        foreach ($colleges_v as $key => $college_v) {
+            $colleges_v_n[$key] = normalize_vector($college_v, $min_max_arr);
+            $similarities[$key] = cosine_similarity($student_v_n, $colleges_v_n[$key]);
+        }
+
+        $ids_vs_sim = array_combine($ids, $similarities);
+        arsort($ids_vs_sim);
+        $sorted_ids = array_keys($ids_vs_sim);
+
+        // get ids sorted
+        dd($sorted_ids);
+        $data['colleges'] = $colleges_v_n;
+        return view('homepage')->with($data);
 
     }
 
