@@ -11,6 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'PagesController@starter')->name('starter');
+
+Route::get('/signup', 'RegisterController@signup')->name('signup');
+Route::post('/signup', 'RegisterController@addStudent')->name('addStudent');
+
+Route::get('/login', 'AuthController@login')->name('login');
+Route::post('/login', 'AuthController@authenticate')->name('authenticate');
+
+
+Route::group(['middleware'=>'student:student'],function(){
+    Route::get('/home', 'PagesController@homepage')->name('homepage');
+    Route::get('/logout', 'AuthController@logout')->name('logout');
 });
