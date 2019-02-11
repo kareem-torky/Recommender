@@ -2,15 +2,24 @@
 
 if (!function_exists('cosine_similarity')) {
     function cosine_similarity($x, $y) {
-        $x_mag = $y_mag = $xy_corr = 0;
+        $x_mag = $y_mag = $xy_corr = $x_mean = $y_mean = 0;
+        foreach ($x as $key => $value){
+            $x_mean += $x[$key];
+            $y_mean += $y[$key];
+        }
+        $x_mean /= 3;
+        $y_mean /= 3;
+
         foreach ($x as $key => $value) {
+            $x[$key] -= $x_mean;
+            $y[$key] -= $y_mean;
             $x_mag += $x[$key] ** 2;
             $y_mag += $y[$key] ** 2;
             $xy_corr += $x[$key] * $y[$key];
         }
-
         $x_mag = sqrt($x_mag);
         $y_mag = sqrt($y_mag);
+
         return $xy_corr/($x_mag * $y_mag);    
     }
 }
@@ -43,6 +52,7 @@ if (!function_exists('college_to_vector')) {
     }
 }
 
+
 if (!function_exists('normalize_vector')) {
     function normalize_vector($vector, $min_max_arr) {
         $vector_n = [
@@ -53,4 +63,3 @@ if (!function_exists('normalize_vector')) {
         return $vector_n;
     }
 }
-

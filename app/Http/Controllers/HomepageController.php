@@ -15,6 +15,8 @@ class HomepageController extends Controller
         return view('homepage')->with($data);
     }
 
+
+
     public function viewList(Request $request){
         $data = $request->validate([
             'speciality' => 'required',
@@ -46,7 +48,13 @@ class HomepageController extends Controller
             ['gpa', '<=', $student_list['gpa']],
             ['price', '<=', $student_list['price']]
             ])->whereIn('gender', $gender)->get();
-        $ids = get_selected_ids($colleges);
+        
+        if($colleges){
+            $ids = get_selected_ids($colleges);
+        } else {
+            session()->flash('error', 'No Colleges Available For These Options');
+            return redirect(route('homepage'));
+        }
         
         $colleges_v = college_to_vector($colleges);
 
@@ -58,10 +66,8 @@ class HomepageController extends Controller
         $ids_vs_sim = array_combine($ids, $similarities);
         arsort($ids_vs_sim);
         $sorted_ids = array_keys($ids_vs_sim);
-
-        // get ids sorted
-        dd($sorted_ids);
-        $data['colleges'] = $colleges_v_n;
+    
+        $data['colleges'] = College::whereIn('id', $sorted_ids)->limit(5)->get();
         return view('homepage')->with($data);
 
     }
@@ -85,6 +91,6 @@ class HomepageController extends Controller
         Student::updateOrCreate(['id' => $id], $data);
 
         $request->session()->flash('edit-success', 'Sent successfully');
-        return redirect(route('settings'));
+        return redirect(route('homepage'));
     }
 }

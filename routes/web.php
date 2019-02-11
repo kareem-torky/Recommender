@@ -24,7 +24,7 @@ Route::post('/login', 'AuthController@authenticate')->name('authenticate');
 
 Route::group(['middleware'=>'student:student'],function(){
     Route::get('/homepage', 'HomepageController@index')->name('homepage');
-    Route::post('/homepage', 'HomepageController@viewList')->name('viewList');
+    Route::post('/homepage', 'HomepageController@viewList')->name('front.viewList');
     Route::get('/homepage/settings', 'HomepageController@settings')->name('settings');
     Route::patch('/homepage/settings', 'HomepageController@settingsUpdate')->name('settingsUpdate');
     Route::get('/logout', 'AuthController@logout')->name('logout');

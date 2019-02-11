@@ -19,6 +19,7 @@
         <div class="row">
             <div id="list-section" class="col-lg-8">
                 <h3 class="mb-3">Recommended Colleges:</h3>
+                @include('inc.messages')
                 @if(count($colleges) > 0)
                     <table class="table table-condensed">
                         <thead>
@@ -49,7 +50,7 @@
                 @endif
             </div>
             <div id="sidebar" class="col-lg-4">
-                <form action="{{ route('viewList') }}" method="POST">
+                <form action="{{ route('front.viewList') }}" method="POST">
                     @csrf 
 
                     <div class="form-group">
