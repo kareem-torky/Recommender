@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'PagesController@starter')->name('starter');
+Route::get('/', 'IntroController@index')->name('intro');
 
 Route::get('/signup', 'RegisterController@signup')->name('signup');
 Route::post('/signup', 'RegisterController@addStudent')->name('addStudent');
@@ -21,6 +21,9 @@ Route::post('/login', 'AuthController@authenticate')->name('authenticate');
 
 
 Route::group(['middleware'=>'student:student'],function(){
-    Route::get('/home', 'PagesController@homepage')->name('homepage');
+    Route::get('/homepage', 'HomepageController@index')->name('homepage');
+    Route::post('/homepage', 'HomepageController@viewList')->name('viewList');
+    Route::get('/homepage/settings', 'HomepageController@settings')->name('settings');
+    Route::patch('/homepage/settings', 'HomepageController@settingsUpdate')->name('settingsUpdate');
     Route::get('/logout', 'AuthController@logout')->name('logout');
 });

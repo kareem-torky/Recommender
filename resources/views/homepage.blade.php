@@ -7,7 +7,7 @@
                 {{ auth('student')->user()->name }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Settings</a>
+                <a class="dropdown-item" href="{{ route('settings') }}">Settings</a>
                 <a class="dropdown-item" href="{{ route('logout') }}">Log Out</a>
             </div>
         </li>
@@ -69,21 +69,23 @@
                 </table>
             </div>
             <div id="sidebar" class="col-lg-4">
-                <form>
+                <form action="{{ route('viewList') }}" method="POST">
+                    @csrf 
+
                     <div class="form-group">
-                        <select class="custom-select">
-                            <option selected>Change Speciality</option>
-                            <option value="1">Medical</option>
-                            <option value="2">Engineering</option>
-                            <option value="3">Agriculture</option>
+                        <label>Select Specitality</label>
+                        <select name="speciality" class="custom-select">
+                            @foreach ($specialities as $speciality)
+                                <option value="{{ $speciality->name }}">{{ $speciality->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Change Pricing</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1">
+                        <label>Select max. Pricing</label>
+                        <input type="numeric" name="price" class="form-control">
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">View List</button>
                     </div>
                 </form>
             </div>
