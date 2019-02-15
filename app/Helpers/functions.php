@@ -2,25 +2,11 @@
 
 if (!function_exists('cosine_similarity')) {
     function cosine_similarity($x, $y) {
-        $x_mag = $y_mag = $xy_corr = $x_mean = $y_mean = 0;
-        foreach ($x as $key => $value){
-            $x_mean += $x[$key];
-            $y_mean += $y[$key];
-        }
-        $x_mean /= 3;
-        $y_mean /= 3;
+        $w1 = 0.8; $w2 = 0.2;
+        $nom = $w1*($x[0]*$y[0]) + $w2*($x[1]*$y[1]);
+        $denom = sqrt($w1*(($x[0])**2 + ($x[1])**2)) * sqrt($w2*(($y[0])**2 + ($y[1])**2));
 
-        foreach ($x as $key => $value) {
-            $x[$key] -= $x_mean;
-            $y[$key] -= $y_mean;
-            $x_mag += $x[$key] ** 2;
-            $y_mag += $y[$key] ** 2;
-            $xy_corr += $x[$key] * $y[$key];
-        }
-        $x_mag = sqrt($x_mag);
-        $y_mag = sqrt($y_mag);
-
-        return $xy_corr/($x_mag * $y_mag);    
+        return $nom/$denom;
     }
 }
 
@@ -34,6 +20,18 @@ if (!function_exists('gender_convert')) {
     }
 }
 
+if (!function_exists('select_cluster')) {
+    function select_cluster($speciality) {
+        $cluster1 = ['Medical', 'Dentistry', 'Pharmacy', 'Nursing'];
+        $cluster2 = ['Engineering', 'Technology', 'Scientific', 'Agriculture'];
+        $cluster3 = ['Relegious', 'Arts', 'Community', 'Social', 'Economical', 'Home Economics', 'Languages'];
+
+        if(in_array($speciality, $cluster1)) return $cluster1;
+        else if(in_array($speciality, $cluster2)) return $cluster2;
+        else if(in_array($speciality, $cluster3)) return $cluster3;
+    }
+}
+
 if (!function_exists('get_selected_ids')) {
     function get_selected_ids($colleges) {
         foreach ($colleges as $key => $college) {
@@ -44,22 +42,38 @@ if (!function_exists('get_selected_ids')) {
 }
 
 if (!function_exists('college_to_vector')) {
-    function college_to_vector($colleges) {
-        foreach ($colleges as $key => $college) {
-            $colleges_v[$key] = ['gpa' => $college['gpa'], 'price' => $college['price'], 'rating' => $college['rating']];
+    function college_to_vector($college) {
+        $college_v = ['gpa' => $college['gpa'], 'price' => $college['price']];
+        return $college_v;
+    }
+}
+
+if (!function_exists('calc_mean')) {
+    function calc_mean($x, $y) {
+        $x_len = count($x);
+        $y_len = count($y);
+
+        if($x_len == $y_len){
+            $counts = $x_len;
+            $len = 2 * $x_len;
+        } else {
+            return false;
         }
-        return $colleges_v;
+
+        $sum = $x['gpa'] + $y['gpa'] + $x['price'] + $y['price'];
+
+        return $sum/$len;
     }
 }
 
 
-if (!function_exists('normalize_vector')) {
-    function normalize_vector($vector, $min_max_arr) {
-        $vector_n = [
-            ($vector['gpa']-$min_max_arr['min_gpa']) / ($min_max_arr['max_gpa']-$min_max_arr['min_gpa']),
-            ($vector['price']-$min_max_arr['min_price']) / ($min_max_arr['max_price']-$min_max_arr['min_price']),
-            ($vector['rating']-$min_max_arr['min_rating']) / ($min_max_arr['max_rating']-$min_max_arr['min_rating'])
-        ];
-        return $vector_n;
-    }
-}
+// if (!function_exists('normalize_vector')) {
+//     function normalize_vector($vector, $min_max_arr) {
+//         $vector_n = [
+//             ($vector['gpa']-$min_max_arr['min_gpa']) / ($min_max_arr['max_gpa']-$min_max_arr['min_gpa']),
+//             ($vector['price']-$min_max_arr['min_price']) / ($min_max_arr['max_price']-$min_max_arr['min_price']),
+//             ($vector['rating']-$min_max_arr['min_rating']) / ($min_max_arr['max_rating']-$min_max_arr['min_rating'])
+//         ];
+//         return $vector_n;
+//     }
+// }
