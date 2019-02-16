@@ -23,7 +23,6 @@ class HomepageController extends Controller
         
         $student_id = auth('student')->user()->id;
         $student = Student::find($student_id);
-
         // Getting Student data
         $student_list = [
             'gender' => $student->gender,
@@ -31,13 +30,10 @@ class HomepageController extends Controller
             'gpa'=> $student->gpa,
             'price'=> (int)$data['price']
         ];
-
         // Forming Student vector
         $student_v = ['gpa'=>$student_list['gpa'], 'price'=>$student_list['price']];
-
         // Converting male to Boys & Both, female to Grils & Both
         $gender = gender_convert($student->gender);
-
         $data['specialities'] = Speciality::all();
         
         // Fetch available colleges from the db
@@ -46,19 +42,16 @@ class HomepageController extends Controller
             ['gpa', '<=', $student_list['gpa']],
             ['price', '<=', $student_list['price']]
             ])->whereIn('gender', $gender)->get();
-
         
-        if($main_colleges){
+        if(count($main_colleges) > 1){
             $num = count($main_colleges);
             if($num < 5){
                 // Select cluster
                 $cluster = select_cluster($data['speciality']);
-
-                $diff = 5 - $num;
                 $added_colleges = College::where([
                     ['gpa', '<=', $student_list['gpa']],
                     ['price', '<=', $student_list['price']]
-                    ])->whereIn('gender', $gender)->whereIn('speciality', $cluster)->limit($diff)->get();
+                    ])->whereIn('gender', $gender)->whereIn('speciality', $cluster)->get();
                 $colleges = $main_colleges->toBase()->merge($added_colleges);
             } else {
                 $colleges = $main_colleges;
@@ -68,7 +61,6 @@ class HomepageController extends Controller
             session()->flash('error', 'No Colleges Available For These Options');
             return redirect(route('homepage'));
         }
-
         // Forming college vectors and finding the mean
         $colleges_v = [];
         foreach ($colleges as $key => $college) {
@@ -77,29 +69,23 @@ class HomepageController extends Controller
             $mean = calc_mean($student_v, $college_v);
             $means[$key] = $mean;
         }
-
         // Adjusting the vectors by subtracting the mean then calculating similarity
-
         foreach ($colleges_v as $key => $college_v) {
-            $x = [$student_v['gpa']-$mean, $student_v['price']-$mean];
-            $y = [$college_v['gpa']-$mean, $college_v['price']-$mean];
+            $x = [$student_v['gpa']-$means[$key], $student_v['price']-$means[$key]];
+            $y = [$college_v['gpa']-$means[$key], $college_v['price']-$means[$key]];
             $similarities[$key] = cosine_similarity($x, $y);
         }
-
-
         $ids_vs_sim = array_combine($ids, $similarities);
         arsort($ids_vs_sim);
         $sorted_ids = array_keys($ids_vs_sim);
-
         foreach ($sorted_ids as $key => $sorted_id) {
             $displayed_colleges[$key] = College::where('id', $sorted_id)->first();
             if($key == 4) break;
         }
         $data['colleges'] = $displayed_colleges;
     
-        dd($student_list, $student_v, $colleges, $num, $colleges_v, $means, $similarities, $sorted_ids, $ids_vs_sim, $data['colleges']);
+        //dd($student_list, $student_v, $colleges, $num, $colleges_v, $ids, $similarities, $sorted_ids, $ids_vs_sim, $data['colleges']);
         return view('homepage')->with($data);
-
     }
 
     public function settings(){

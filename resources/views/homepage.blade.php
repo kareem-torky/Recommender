@@ -45,9 +45,13 @@
                             @endforeach
                         </tbody>
                     </table>
+                    @if(count($colleges) < 5)
+                        <p class="text-center">No more colleges available for you!</p>
+                    @endif
                 @else 
                     <p>Select speciality and max. price to show list</p>
                 @endif
+                
             </div>
             <div id="sidebar" class="col-lg-4">
                 <form action="{{ route('front.viewList') }}" method="POST">

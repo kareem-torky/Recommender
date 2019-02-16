@@ -1,11 +1,8 @@
 <?php
-
 if (!function_exists('cosine_similarity')) {
     function cosine_similarity($x, $y) {
-        $w1 = 0.8; $w2 = 0.2;
-        $nom = $w1*($x[0]*$y[0]) + $w2*($x[1]*$y[1]);
-        $denom = sqrt($w1*(($x[0])**2 + ($x[1])**2)) * sqrt($w2*(($y[0])**2 + ($y[1])**2));
-
+        $nom = ($x[0]*$y[0]) + ($x[1]*$y[1]);
+        $denom = sqrt(($x[0])**2 + ($x[1])**2) * sqrt(($y[0])**2 + ($y[1])**2);
         return $nom/$denom;
     }
 }
@@ -25,7 +22,6 @@ if (!function_exists('select_cluster')) {
         $cluster1 = ['Medical', 'Dentistry', 'Pharmacy', 'Nursing'];
         $cluster2 = ['Engineering', 'Technology', 'Scientific', 'Agriculture'];
         $cluster3 = ['Relegious', 'Arts', 'Community', 'Social', 'Economical', 'Home Economics', 'Languages'];
-
         if(in_array($speciality, $cluster1)) return $cluster1;
         else if(in_array($speciality, $cluster2)) return $cluster2;
         else if(in_array($speciality, $cluster3)) return $cluster3;
@@ -52,28 +48,13 @@ if (!function_exists('calc_mean')) {
     function calc_mean($x, $y) {
         $x_len = count($x);
         $y_len = count($y);
-
         if($x_len == $y_len){
             $counts = $x_len;
             $len = 2 * $x_len;
         } else {
             return false;
         }
-
         $sum = $x['gpa'] + $y['gpa'] + $x['price'] + $y['price'];
-
         return $sum/$len;
     }
 }
-
-
-// if (!function_exists('normalize_vector')) {
-//     function normalize_vector($vector, $min_max_arr) {
-//         $vector_n = [
-//             ($vector['gpa']-$min_max_arr['min_gpa']) / ($min_max_arr['max_gpa']-$min_max_arr['min_gpa']),
-//             ($vector['price']-$min_max_arr['min_price']) / ($min_max_arr['max_price']-$min_max_arr['min_price']),
-//             ($vector['rating']-$min_max_arr['min_rating']) / ($min_max_arr['max_rating']-$min_max_arr['min_rating'])
-//         ];
-//         return $vector_n;
-//     }
-// }
