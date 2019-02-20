@@ -58,3 +58,14 @@ if (!function_exists('calc_mean')) {
         return $sum/$len;
     }
 }
+
+if (!function_exists('get_image')) {
+    function get_image($path_image) {
+        return url('/uploads/' . $path_image);
+    }
+}
+
+
+//  pathes 
+
+define("UPLOADS_PATH", "uploads/");

@@ -57,3 +57,22 @@
     padding: 50px;
     min-height: 450px;
 }
+
+/* Admin Panel */
+
+.sidebar {
+    background-color: rgb(131, 50, 12);
+    color: beige;
+}
+
+.right-container {
+    padding: 2rem;
+}
+
+i {
+    color: white;
+}
+
+.top-title {
+    padding: 2rem;
+}

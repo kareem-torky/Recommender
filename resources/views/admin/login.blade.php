@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-lg-6 offset-lg-3 form-box">
                 @include('inc.messages')
-                {!! Form::open(['route'=>'authenticate', 'method'=>'POST']) !!}
+                {!! Form::open(['route'=>'admin.authenticate', 'method'=>'POST']) !!}
         
                     {!! Form::token() !!}
                     
