@@ -36,7 +36,7 @@
                             @foreach ($colleges as $key => $college)
                                 <tr>
                                     <th scope="row">{{ $key+1 }}</th>
-                                    <td>{{ $college->college }}</td>
+                                    <td><a href="{{ route('front.viewCollege', ['college'=>$college->id]) }}">{{ $college->college }}</a></td>
                                     <td>{{ $college->university }}</td>
                                     <td>{{ $college->gender }}</td>
                                     <td>{{ $college->gpa }}</td>

@@ -20,7 +20,7 @@ class AuthController extends Controller
     	$remember = request()->has('remember') ? true: false;
     	if(\Auth::guard('admin')->attempt(['email'=>request('email'),'password'=>request('password')],$remember))
     	{
-    		return redirect(route('admin.index'));
+    		return redirect(route('admin.colleges.index'));
     	}
     	else
     	{

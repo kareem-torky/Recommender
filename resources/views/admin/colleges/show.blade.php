@@ -20,6 +20,9 @@
                     </div>
                 </div>
             </div>
-        </div>      
+        </div>   
+        <div class="text-center mt-5">
+            <a class="btn btn-info" href="{{ url()->previous() }}">Back</a>
+        </div>   
     </div>
 @endsection

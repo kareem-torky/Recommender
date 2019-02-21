@@ -1,7 +1,9 @@
 @extends('layouts.admin')
 
 @section('content-column')
-    <div class="container right-container">
+    <div class="container">
+        <h3 class="title-left mb-3">Colleges</h3>
+        <a class="btn btn-info button-right mb-3" href="{{ route('admin.colleges.create') }}">Add</a>
         <table class="table">
             <thead>
                 <tr>
@@ -13,9 +15,10 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($colleges as $college)
+                <?php $count = 1 ?>
+                @foreach ($colleges as $key => $college)
                     <tr>
-                        <th scope="row">{{ $college->id }}</th>
+                        <th scope="row">{{$colleges->perPage()*($colleges->currentPage()-1)+$count}}</th>
                         <td>{{ $college->university }}</td>
                         <td>{{ $college->college }}</td>
                         <td>{{ $college->speciality }}</td>
@@ -29,6 +32,7 @@
                             </form>
                         </td>
                     </tr>
+                    <?php $count += 1 ?>
                 @endforeach
             </tbody>
         </table>

@@ -61,7 +61,7 @@ if (!function_exists('calc_mean')) {
 
 if (!function_exists('get_image')) {
     function get_image($path_image) {
-        return url('/uploads/' . $path_image);
+        return url('/uploads/colleges/' . $path_image);
     }
 }
 
@@ -69,3 +69,4 @@ if (!function_exists('get_image')) {
 //  pathes 
 
 define("UPLOADS_PATH", "uploads/");
+define("COLLEGES_PATH", "colleges/");

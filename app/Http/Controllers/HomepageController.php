@@ -88,6 +88,11 @@ class HomepageController extends Controller
         return view('homepage')->with($data);
     }
 
+    public function viewCollege(College $college){
+        $data['college'] = $college;
+        return view('college')->with($data);
+    }
+
     public function settings(){
         $student_id = auth('student')->user()->id;
         $data['student'] = Student::find($student_id);
