@@ -36,7 +36,7 @@
                             @foreach ($colleges as $key => $college)
                                 <tr>
                                     <th scope="row">{{ $key+1 }}</th>
-                                    <td><a href="{{ route('front.viewCollege', ['college'=>$college->id]) }}">{{ $college->college }}</a></td>
+                                    <td><a href="{{ route('front.viewCollege', ['college'=>$college->id]) }}" target="_blank">{{ $college->college }}</a></td>
                                     <td>{{ $college->university }}</td>
                                     <td>{{ $college->gender }}</td>
                                     <td>{{ $college->gpa }}</td>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="form-group">
                         <label>Select max. Pricing</label>
-                        <input type="numeric" name="price" class="form-control">
+                        <input type="numeric" name="price" class="form-control" value="{{ old('price') }}">
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">View List</button>
