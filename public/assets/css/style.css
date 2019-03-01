@@ -56,6 +56,8 @@
     background-color: rgba(205, 215, 225, 0.8);
     padding: 50px;
     min-height: 450px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 /* Admin Panel */

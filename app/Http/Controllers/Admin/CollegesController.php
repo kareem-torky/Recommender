@@ -13,7 +13,7 @@ use File;
 class CollegesController extends Controller
 {
     public function index(){
-        $data['colleges'] = College::paginate(15);
+        $data['colleges'] = College::orderBy('id', 'DESC')->paginate(15);
         return view('admin.colleges.index')->with($data);
     }
 

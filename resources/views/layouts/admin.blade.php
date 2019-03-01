@@ -3,6 +3,9 @@
 @section('nav-menu')
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
+          <a class="nav-link light-text" href="{{ route('admin.intro.index') }}">Intro</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link light-text" href="{{ route('admin.colleges.index') }}">Colleges</a>
         </li>
         <li class="nav-item">
@@ -18,7 +21,7 @@
                 {{ auth('admin')->user()->name }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{{ back() }}">Log Out</a>
+                <a class="dropdown-item" href="{{ route('admin.logout') }}">Log Out</a>
             </div>
         </li>
     </ul>
@@ -27,13 +30,6 @@
 @section('content')
     <div class="container admin-container">
         <div class="row">
-            {{-- <div class="col-lg-3 sidebar">
-                <div class="list-group text-center">
-                    <a href="{{ route('admin.colleges.index') }}" class="list-group-item list-group-item-action">Colleges</a>
-                    <a href="{{ route('admin.universities.index') }}" class="list-group-item list-group-item-action">Universities</a>
-                    <a href="{{ route('admin.specialities.index') }}" class="list-group-item list-group-item-action">Specialities</a>
-                </div>
-            </div> --}}
             <div class="col-lg-12">
                 @yield('content-column')
             </div>

@@ -27,7 +27,7 @@
 
                     <div class="form-group">
                         {!! Form::label('gender', 'Gender') !!}
-                        {!! Form::select('gender', ['M' => 'Male', 'F' => 'Female'], null, ['placeholder' => 'Select Gender', 'class'=>'form-control']) !!}
+                        {!! Form::select('gender', ['male' => 'Male', 'female' => 'Female'], null, ['placeholder' => 'Select Gender', 'class'=>'form-control']) !!}
                     </div>
 
                     <div class="form-group">

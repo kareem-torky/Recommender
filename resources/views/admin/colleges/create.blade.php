@@ -71,5 +71,8 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </p>
         </form>
+        <div class="text-center">
+            <a class="btn btn-info" href="{{ url()->previous() }}">Back</a>
+        </div> 
     </div>
 @endsection

@@ -60,14 +60,19 @@
                     <div class="form-group">
                         <label>Select Specitality</label>
                         <select name="speciality" class="custom-select">
-                            @foreach ($specialities as $speciality)
-                                <option value="{{ $speciality->name }}">{{ $speciality->name }}</option>
+                            @foreach ($specialities as $this_speciality)
+                                @isset($speciality)
+                                    <option value="{{ $this_speciality->name }}" @if($speciality == $this_speciality->name) selected @endif>{{ $this_speciality->name }}</option>
+                                @endisset
+                                @empty($speciality)
+                                    <option value="{{ $this_speciality->name }}">{{ $this_speciality->name }}</option>
+                                @endempty 
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Select max. Pricing</label>
-                        <input type="numeric" name="price" class="form-control" value="{{ old('price') }}">
+                        <input type="numeric" name="price" class="form-control" @isset($price) value="{{ $price }}" @endisset>
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">View List</button>

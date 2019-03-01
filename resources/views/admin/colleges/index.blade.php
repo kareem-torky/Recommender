@@ -25,7 +25,7 @@
                         <td>
                             <a class="btn btn-info" href="{{ route('admin.colleges.show', ['college'=>$college->id]) }}"><i class="fas fa-eye"></i></a>
                             <a class="btn btn-primary" href="{{route('admin.colleges.edit', ['college'=> $college->id])}}"><i class="fas fa-pen"></i></a>
-                            <form method="POST" action="{{route('admin.colleges.destroy', ['college'=> $college->id])}}" style="display:inline">
+                            <form method="POST" action="{{route('admin.colleges.destroy', ['college'=> $college->id])}}" style="display:inline" onclick="return confirm('Are you sure you want to delete?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
@@ -36,8 +36,14 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="text-center">
-            {!! $colleges->render() !!}
+
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                <div class="text-center">
+                    {!! $colleges->render() !!}
+                </div>
+            </div>
         </div>
+        
     </div>
 @endsection

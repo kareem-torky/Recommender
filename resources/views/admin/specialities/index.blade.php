@@ -19,7 +19,7 @@
                         <th scope="row">{{$specialities->perPage()*($specialities->currentPage()-1)+$count}}</th>
                         <td>{{ $speciality->name }}</td>
                         <td>
-                            <form method="POST" action="{{route('admin.specialities.destroy', ['speciality'=> $speciality->id])}}" style="display:inline">
+                            <form method="POST" action="{{route('admin.specialities.destroy', ['speciality'=> $speciality->id])}}" style="display:inline" onclick="return confirm('Are you sure you want to delete?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>

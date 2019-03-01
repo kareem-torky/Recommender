@@ -23,6 +23,7 @@ class HomepageController extends Controller
         
         $student_id = auth('student')->user()->id;
         $student = Student::find($student_id);
+
         // Getting Student data
         $student_list = [
             'gender' => $student->gender,
@@ -30,8 +31,10 @@ class HomepageController extends Controller
             'gpa'=> $student->gpa,
             'price'=> (int)$data['price']
         ];
+
         // Forming Student vector
         $student_v = ['gpa'=>$student_list['gpa'], 'price'=>$student_list['price']];
+
         // Converting male to Boys & Both, female to Grils & Both
         $gender = gender_convert($student->gender);
         $data['specialities'] = Speciality::all();
@@ -61,6 +64,7 @@ class HomepageController extends Controller
             session()->flash('error', 'No Colleges Available For These Options');
             return redirect(route('homepage'));
         }
+
         // Forming college vectors and finding the mean
         $colleges_v = [];
         foreach ($colleges as $key => $college) {
@@ -69,6 +73,7 @@ class HomepageController extends Controller
             $mean = calc_mean($student_v, $college_v);
             $means[$key] = $mean;
         }
+
         // Adjusting the vectors by subtracting the mean then calculating similarity
         foreach ($colleges_v as $key => $college_v) {
             $x = [$student_v['gpa']-$means[$key], $student_v['price']-$means[$key]];
@@ -85,6 +90,7 @@ class HomepageController extends Controller
         $data['colleges'] = $displayed_colleges;
     
         //dd($student_list, $student_v, $colleges, $num, $colleges_v, $ids, $similarities, $sorted_ids, $ids_vs_sim, $data['colleges']);
+        //dd($data);
         return view('homepage')->with($data);
     }
 

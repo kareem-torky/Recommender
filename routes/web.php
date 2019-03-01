@@ -11,8 +11,6 @@
 |
 */
 
-Route::get('/trial', 'TrialController@trial');
-
 Route::get('/', 'IntroController@index')->name('intro');
 
 Route::get('/signup', 'RegisterController@signup')->name('signup');
@@ -55,5 +53,9 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::get('/specialities/create', 'SpecialitiesController@create')->name('admin.specialities.create');
         Route::post('/specialities/create', 'SpecialitiesController@store')->name('admin.specialities.store');
         Route::delete('/specialities/{speciality}', 'SpecialitiesController@destroy')->name('admin.specialities.destroy');
+    
+        Route::get('/intro', 'IntroController@index')->name('admin.intro.index');
+        Route::patch('/intro', 'IntroController@update')->name('admin.intro.update');
+    
     });
 });
