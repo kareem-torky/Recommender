@@ -33,7 +33,12 @@ class HomepageController extends Controller
         ];
 
         // Forming Student vector
-        $student_v = ['gpa'=>$student_list['gpa'], 'price'=>$student_list['price']];
+        $studentV = [$student_list['gpa'], $student_list['price'], 1];
+        $studentV_mean = calc_mean($studentV);
+        $studentV_norm = [];
+        foreach ($studentV as $key => $value) {
+            $studentV_norm[$key] = $value - $studentV_mean;
+        }
 
         // Converting male to Boys & Both, female to Grils & Both
         $gender = gender_convert($student->gender);
@@ -46,51 +51,49 @@ class HomepageController extends Controller
             ['price', '<=', $student_list['price']]
             ])->whereIn('gender', $gender)->get();
         
-        if(count($main_colleges) > 1){
-            $num = count($main_colleges);
-            if($num < 5){
-                // Select cluster
-                $cluster = select_cluster($data['speciality']);
-                $added_colleges = College::where([
-                    ['gpa', '<=', $student_list['gpa']],
-                    ['price', '<=', $student_list['price']]
-                    ])->whereIn('gender', $gender)->whereIn('speciality', $cluster)->get();
-                $colleges = $main_colleges->toBase()->merge($added_colleges);
-            } else {
-                $colleges = $main_colleges;
+        if(count($main_colleges) < 5){
+            // Select group
+            $diff = 5 - count($main_colleges);
+            $group = select_group($data['speciality']);
+            $added_colleges = College::where([
+                ['gpa', '<=', $student_list['gpa']],
+                ['price', '<=', $student_list['price']]
+                ])->whereIn('gender', $gender)->whereIn('speciality', $group)->get();
+            if(count($main_colleges)==0 && count($added_colleges)==0){
+                session()->flash('error', 'No Colleges Available For These Options');
+                return redirect(route('homepage'));
             }
-            $ids = get_selected_ids($colleges);
+        }
+
+        //dd($main_colleges, $added_colleges, count($main_colleges), count($added_colleges));
+        if(count($main_colleges) != 0){
+            $collegesV_norm = get_collegesV_norm($main_colleges);
+            foreach ($collegesV_norm as $key => $collegeV_norm) {
+                $similarities[$key] = cosine_similarity($collegeV_norm, $studentV_norm);
+            }
+            $displayed_colleges = get_displayed_colleges($main_colleges, $similarities);
+        }
+        
+        if(count($added_colleges) != 0){
+            $collegesV_norm = get_collegesV_norm($added_colleges);
+            foreach ($collegesV_norm as $key => $collegeV_norm) {
+                $similarities[$key] = cosine_similarity($collegeV_norm, $studentV_norm);
+            }
+            $added_displayed_colleges = get_displayed_colleges($added_colleges, $similarities, $diff);
+        }
+
+        //dd($displayed_colleges, $added_displayed_colleges);
+        if(isset($displayed_colleges) && isset($added_displayed_colleges)){
+            $data['colleges'] = array_merge($displayed_colleges, $added_displayed_colleges); 
+        } else if(isset($displayed_colleges) && !isset($added_displayed_colleges)){
+            $data['colleges'] = $displayed_colleges;
+        } else if(!isset($displayed_colleges) && isset($added_displayed_colleges)){
+            $data['colleges'] = $added_displayed_colleges;
         } else {
-            session()->flash('error', 'No Colleges Available For These Options');
-            return redirect(route('homepage'));
+            $data['colleges'] = [];
         }
-
-        // Forming college vectors and finding the mean
-        $colleges_v = [];
-        foreach ($colleges as $key => $college) {
-            $college_v = college_to_vector($college);
-            $colleges_v[$key] = $college_v;
-            $mean = calc_mean($student_v, $college_v);
-            $means[$key] = $mean;
-        }
-
-        // Adjusting the vectors by subtracting the mean then calculating similarity
-        foreach ($colleges_v as $key => $college_v) {
-            $x = [$student_v['gpa']-$means[$key], $student_v['price']-$means[$key]];
-            $y = [$college_v['gpa']-$means[$key], $college_v['price']-$means[$key]];
-            $similarities[$key] = cosine_similarity($x, $y);
-        }
-        $ids_vs_sim = array_combine($ids, $similarities);
-        arsort($ids_vs_sim);
-        $sorted_ids = array_keys($ids_vs_sim);
-        foreach ($sorted_ids as $key => $sorted_id) {
-            $displayed_colleges[$key] = College::where('id', $sorted_id)->first();
-            if($key == 4) break;
-        }
-        $data['colleges'] = $displayed_colleges;
-    
-        //dd($student_list, $student_v, $colleges, $num, $colleges_v, $ids, $similarities, $sorted_ids, $ids_vs_sim, $data['colleges']);
-        //dd($data);
+      
+        //dd($main_colleges, $collegesV_norm, $ids, $similarities, $ids_vs_sim)
         return view('homepage')->with($data);
     }
 

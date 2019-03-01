@@ -30,6 +30,7 @@
                             <th scope="col">Gender</th>
                             <th scope="col">GPA</th>
                             <th scope="col">Price</th>
+                            <th scope="col">Rating</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,6 +42,7 @@
                                     <td>{{ $college->gender }}</td>
                                     <td>{{ $college->gpa }}</td>
                                     <td>{{ $college->price }}</td>
+                                    <td>{{ $college->rating }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
